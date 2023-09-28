@@ -1,0 +1,26 @@
+{
+    "tests": [
+	{"fullname": "MovementTest.DisplacementTest",
+         "points": 3},
+	{"fullname": "MovementTest.DisplacementTestIgnoringMass",
+	 "points": 2},
+	{"fullname": "MovementTest.NormalCalculationTest",
+         "points": 2},
+	{"fullname": "MovementTest.PenetrationCalculationTest",
+         "points": 3},
+	{"fullname": "MovementTest.PlaneCollisionTest",
+         "points": 4},
+	{"fullname": "MovementTest.PlaneNormalTest",
+         "points": 3},
+	{"fullname": "MovementTest.PlanePenetrationTest",
+         "points": 3},
+	{"fullname": "MovementTest.VelocityTest",
+         "points": 4},
+	{"fullname": "MovementTest.VelocityTestIgnoringMass",
+         "points": 2},
+	{"fullname": "SceneTests.TestSpherePlaneCollision",
+         "points": 3},
+	{"fullname": "SceneTests.TestSphereSphereCollision",
+         "points": 3}
+    ]
+}
