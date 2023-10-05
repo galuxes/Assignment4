@@ -8,16 +8,14 @@ public class PlaneCollider : PhysicsCollider
     {
         get
         {
-            // TODO: YOUR CODE HERE
-            return Vector3.zero;
+            return transform.up;
         }
     }
     public float Offset
     {
         get
         {
-            // TODO: YOUR CODE HERE
-            return 0;
+            return Vector3.Dot(position, Normal);
         }
     }
 }
