@@ -16,7 +16,7 @@ public static class CollisionDetection
     {
         normal = p.Normal;
         var pOffset = p.Offset;
-        var sOffset = Vector3.Dot(s.position, normal);
+        var sOffset = Vector3.Dot(s.Center, normal);
         var distance = sOffset - pOffset;
         if (distance < 0)
         {
@@ -29,20 +29,39 @@ public static class CollisionDetection
     public static void ApplyCollisionResolution(Sphere s1, Sphere s2)
     {
         GetNormalAndPenetration(s1,s2,out var normal,out var penetration);
-
-        var sm = Mathf.Pow(s1.invMass * s2.invMass, -1);
+        
+        if(penetration <= 0) { return; }
+        if(s1.invMass == 0 && s2.invMass == 0) { return; }
+        
+        var sm = Mathf.Pow(s1.invMass + s2.invMass, -1);
         var pm1 = s1.invMass * sm;
         var pm2 = s2.invMass * sm;
         
+        // Fix Position
         var s1Delta = normal * penetration * pm1;
         var s2Delta = (normal*-1) * penetration * pm2;
-
         s1.position += s1Delta;
         s2.position += s2Delta;
+        
+        // Fix Velocity
+        var Vt = s1.velocity - s2.velocity;
+        var sepVel = Vector3.Dot(normal,Vt);
+        var Vdelta = -2 * sepVel;
+        s1.velocity += normal * Vdelta * pm1;
+        s2.velocity += normal * Vdelta * pm2;
     }
 
     public static void ApplyCollisionResolution(Sphere s, PlaneCollider p)
     {
-        // TODO: YOUR CODE HERE
+        GetNormalAndPenetration( s, p,out var normal,out var penetration);
+
+        // Fix Position
+        if(penetration <= 0) { return; }
+        var sDelta = penetration * normal;
+        s.position += sDelta;
+        
+        // Fix Velocity
+        s.velocity = Vector3.Reflect(s.velocity, normal);
+
     }
 }
