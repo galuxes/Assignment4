@@ -20,7 +20,7 @@ public static class CollisionDetection
         var distance = sOffset - pOffset;
         if (distance < 0)
         {
-            distance *= -1;
+            distance = Mathf.Abs(distance);
             normal *= -1;
         }
         penetration = s.Radius - distance;
@@ -38,17 +38,20 @@ public static class CollisionDetection
         var pm2 = s2.invMass * sm;
         
         // Fix Position
-        var s1Delta = normal * penetration * pm1;
-        var s2Delta = (normal*-1) * penetration * pm2;
+        var s1Delta = normal * (penetration * pm1);
+        var s2Delta = normal * (-1 * penetration * pm2);
         s1.position += s1Delta;
         s2.position += s2Delta;
         
         // Fix Velocity
         var Vt = s1.velocity - s2.velocity;
         var sepVel = Vector3.Dot(normal,Vt);
-        var Vdelta = -2 * sepVel;
-        s1.velocity += normal * Vdelta * pm1;
-        s2.velocity += normal * Vdelta * pm2;
+        if (sepVel < 0)
+        {
+            var vDelta = -2 * sepVel;
+            s1.velocity += normal * (vDelta * pm1);
+            s2.velocity += normal * (-1 * vDelta * pm2);
+        }
     }
 
     public static void ApplyCollisionResolution(Sphere s, PlaneCollider p)
@@ -61,7 +64,13 @@ public static class CollisionDetection
         s.position += sDelta;
         
         // Fix Velocity
-        s.velocity = Vector3.Reflect(s.velocity, normal);
+        //s.velocity = Vector3.Reflect(s.velocity, normal);
+        var sepVel = Vector3.Dot(normal,s.velocity);
+        if (sepVel < 0)
+        {
+            var vDelta = -2 * sepVel;
+            s.velocity += vDelta * normal;
+        }
 
     }
 }
